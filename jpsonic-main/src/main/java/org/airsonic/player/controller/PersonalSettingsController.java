@@ -21,8 +21,13 @@ package org.airsonic.player.controller;
 
 import com.tesshu.jpsonic.controller.OutlineHelpSelector;
 import com.tesshu.jpsonic.domain.FontScheme;
+import com.tesshu.jpsonic.domain.SpeechToTextLangScheme;
 import org.airsonic.player.command.PersonalSettingsCommand;
-import org.airsonic.player.domain.*;
+import org.airsonic.player.domain.AlbumListType;
+import org.airsonic.player.domain.AvatarScheme;
+import org.airsonic.player.domain.Theme;
+import org.airsonic.player.domain.User;
+import org.airsonic.player.domain.UserSettings;
 import org.airsonic.player.service.SecurityService;
 import org.airsonic.player.service.SettingsService;
 import org.apache.commons.lang.StringUtils;
@@ -124,6 +129,9 @@ public class PersonalSettingsController {
         command.setVoiceInputEnabled(userSettings.isVoiceInputEnabled());
         command.setOthersPlayingEnabled(settingsService.isOthersPlayingEnabled());
         command.setShowCurrentSongInfo(userSettings.isShowCurrentSongInfo());
+        command.setSpeechLangSchemes(SpeechToTextLangScheme.values());
+        command.setSpeechLangSchemeName(userSettings.getSpeechLangSchemeName());
+        command.setIetf(userSettings.getIetf());
 
         toast.ifPresent(b -> command.setShowToast(b));
 
@@ -231,11 +239,13 @@ public class PersonalSettingsController {
         settings.setForceBio2Eng(command.isForceBio2Eng());
         settings.setVoiceInputEnabled(command.isVoiceInputEnabled());
         settings.setShowCurrentSongInfo(command.isShowCurrentSongInfo());
-
+        settings.setSpeechLangSchemeName(command.getSpeechLangSchemeName());
+        if (StringUtils.isNotBlank(command.getIetf()) && command.getIetf().matches("[a-zA-Z\\-\\_]+")) {
+            settings.setIetf(command.getIetf());
+        }
         if (StringUtils.isNotBlank(command.getLastFmPassword())) {
             settings.setLastFmPassword(command.getLastFmPassword());
         }
-
         settings.setChanged(new Date());
         settingsService.updateUserSettings(settings);
 
