@@ -53,8 +53,6 @@ public class MainController {
     @Autowired
     private SecurityService securityService;
     @Autowired
-    private PlayerService playerService;
-    @Autowired
     private SettingsService settingsService;
     @Autowired
     private JpsonicComparators jpsonicComparator;
@@ -118,7 +116,6 @@ public class MainController {
         mediaFileService.populateStarredDate(dir, username);
         mediaFileService.populateStarredDate(children, username);
 
-        Player player = playerService.getPlayer(request, response);
         Map<String, Object> map = LegacyMap.of();
         map.put("dir", dir);
         map.put("files", files);
@@ -126,7 +123,6 @@ public class MainController {
         map.put("ancestors", getAncestors(dir));
         map.put("coverArtSizeMedium", CoverArtScheme.MEDIUM.getSize());
         map.put("coverArtSizeLarge", CoverArtScheme.LARGE.getSize());
-        map.put("player", player);
         map.put("user", securityService.getCurrentUser(request));
         map.put("visibility", userSettings.getMainVisibility());
         map.put("showAlbumYear", settingsService.isSortAlbumsByYear());
