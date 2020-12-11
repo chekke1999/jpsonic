@@ -41,6 +41,7 @@ public class CustomThemeSource extends ResourceBundleThemeSource {
     private SettingsService settingsService;
     private String basenamePrefix;
 
+    @SuppressWarnings("PMD.UselessParentheses") // False positive for (prefix + id) in loop
     @Override
     protected MessageSource createMessageSource(String basename) {
         ResourceBundleMessageSource messageSource = (ResourceBundleMessageSource) super.createMessageSource(basename);
